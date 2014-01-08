@@ -20,9 +20,9 @@
     )
   )
 
-(println (str "@" (build-target "host" "public")))
+;(println (str "@" (build-target "host" "public")))
 
-(defn build-pdu [oid pdu-type]
+(defn build-pdu [oid]
   "Build PDU Object"
   (doto (PDU.)
     (.setType PDU/GETBULK)
@@ -30,14 +30,14 @@
     )
   )
 
-(build-pdu '("1.3.6.1.2.1.1.3.0" "1.3.6.1.2.1.2.2.1.21.1"))
+;(build-pdu '("1.3.6.1.2.1.1.3.0" "1.3.6.1.2.1.2.2.1.21.1"))
 
 
 
 (defn response? [response]
   (and response (== (. response getType) PDU/RESPONSE))
   )
-(response? nil)
+;(response? nil)
 
 
 (defn snmpgetv1 [host community & oid]
