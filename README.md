@@ -122,10 +122,11 @@ http://stackoverflow.com/questions/6831964/snmp4j-adding-user
 $ lein compile
 $ lein uberjar
 $ cd HelloJava
-$ cp ../target/ew_snmp-0.1.0-SNAPSHOT-standalone.jar .
-$ javac -cp '.:ew_snmp-0.1.0-SNAPSHOT-standalone.jar' HelloJava.java
-$ java -cp '.:ew_snmp-0.1.0-SNAPSHOT-standalone.jar' HelloJava
+$ cp ../target/ew_snmp-0.1.0-standalone.jar .
+$ javac -cp '.:ew_snmp-0.1.0-standalone.jar' HelloJava.java
+$ java -cp '.:ew_snmp-0.1.0-standalone.jar' HelloJava
 >> Hello from Java!
+>> Vigor21
 >> Vigor21
 
 ## License
