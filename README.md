@@ -83,7 +83,7 @@ sudo launchctl load -w /System/Library/LaunchDaemons/org.net-snmp.snmpd.plist
 
 ### after following this tutorial
 Using user javav3 and phrases comomolalagramola
-snmpwalk -v 3 -u juanv3 -l authPriv -a MD5 -A comomolalagramola -x DES -X comomolalagramola localhost .1
+snmpwalk -v 3 -u juanv3 -l authPriv -a MD5 -A comomolagramola -x DES -X comomolagramola localhost .1
 ->>> a lot of output of this style
 SNMPv2-MIB::sysDescr.0 = STRING: Darwin Vigor21 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug 23 16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64
 SNMPv2-MIB::sysObjectID.0 = OID: NET-SNMP-MIB::netSnmpAgentOIDs.255

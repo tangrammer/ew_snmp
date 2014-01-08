@@ -22,7 +22,7 @@
 
 (println (str "@" (build-target "host" "public")))
 
-(defn build-pdu [oid]
+(defn build-pdu [oid pdu-type]
   "Build PDU Object"
   (doto (PDU.)
     (.setType PDU/GETBULK)
