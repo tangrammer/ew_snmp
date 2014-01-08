@@ -9,6 +9,7 @@
    [org.snmp4j.smi OID VariableBinding OctetString GenericAddress UdpAddress IpAddress]
    [java.net InetAddress]
    )
+  (:gen-class :methods [#^{:static true} [v3 [String String String] String]])
   )
 
 (def ip-address "localhost")
@@ -55,5 +56,6 @@
                          (str xv))) (. response getVariableBindings)))
           (println "no response" event)
           )))))
-
-(getv3 "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.2.0")
+(defn -v3 [u p oid]
+  (first (getv3 u p oid)))
+(-v3 "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.2.0")

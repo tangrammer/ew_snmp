@@ -116,6 +116,18 @@ SNMPv2-MIB::sysORDescr.5 = STRING: The MIB module for managing TCP implementatio
 http://www.snmp4j.org/doc/org/snmp4j/security/package-summary.html
 http://stackoverflow.com/questions/6831964/snmp4j-adding-user
 
+
+# generating and using clojure jar
+
+$ lein compile
+$ lein uberjar
+$ cd HelloJava
+$ cp ../target/ew_snmp-0.1.0-SNAPSHOT-standalone.jar .
+$ javac -cp '.:ew_snmp-0.1.0-SNAPSHOT-standalone.jar' HelloJava.java
+$ java -cp '.:ew_snmp-0.1.0-SNAPSHOT-standalone.jar' HelloJava
+>> Hello from Java!
+>> Vigor21
+
 ## License
 
 Copyright © 2014
