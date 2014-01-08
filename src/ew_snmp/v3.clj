@@ -56,6 +56,3 @@
                          (str xv))) (. response getVariableBindings)))
           (println "no response" event)
           )))))
-(defn -v3 [u p oid]
-  (first (getv3 u p oid)))
-(-v3 "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.2.0")

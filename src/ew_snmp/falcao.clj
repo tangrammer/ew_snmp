@@ -7,7 +7,6 @@
     [org.snmp4j.smi OID VariableBinding OctetString GenericAddress]
     [java.net InetAddress]
     )
-  (:gen-class :methods [#^{:static true} [v1 [String String String] String]])
   )
 
 (defn build-target [host community]
@@ -15,7 +14,7 @@
   (doto (CommunityTarget.)
     (.setCommunity (new OctetString community))
     (.setAddress (GenericAddress/parse (format "udp:%s/161" host)))
-    (.setVersion SnmpConstants/version1)
+    (.setVersion SnmpConstants/version2c)
     (.setRetries 0)
     (.setTimeout 1000)
     )
@@ -26,7 +25,7 @@
 (defn build-pdu [oid]
   "Build PDU Object"
   (doto (PDU.)
-    (.setType PDU/GETBULK)
+    (.setType PDU/GET)
     (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))
     )
   )
@@ -42,13 +41,13 @@
 
 
 
-(defn snmpgetv1 [host community & oid]
+(defn snmpgetv2 [host community & oid]
   (do
     (def pdu (build-pdu oid))
     (def target (build-target host community))
     (def snmp (Snmp. (DefaultUdpTransportMapping.)))
     (. snmp listen)
-    (def event (. snmp get pdu target))
+    (def event (. snmp send pdu target nil))
     (def response (. event getResponse))
     (. snmp close)
     (when (response? response)
@@ -61,9 +60,4 @@
   )
   )
 (vec (map
-      #(snmpgetv1 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"]))
-
-(defn -v1 [h c oid]
-  (first (snmpgetv1 h c oid))
-  )
-(-v1 "localhost" "public" "1.3.6.1.2.1.1.5.0")
+      #(snmpgetv2 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"]))
