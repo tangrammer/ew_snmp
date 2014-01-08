@@ -1,4 +1,4 @@
-(ns ew_snmp.falcao
+(ns ew_snmp.v2
   (:import
     [org.snmp4j Snmp PDU CommunityTarget]
     [org.snmp4j.mp SnmpConstants]
@@ -35,13 +35,15 @@
 
 
 (defn response? [response]
-  (and response (== (. response getType) PDU/RESPONSE))
+  (let [t (. response getType)]
+    (println t)
+   (and response (== (. response getType) PDU/RESPONSE)))
   )
 ;(response? nil)
 
 
 
-(defn snmpgetv2 [host community & oid]
+(defn getv2 [host community & oid]
   (do
     (def pdu (build-pdu oid))
     (def target (build-target host community))
@@ -59,5 +61,7 @@
     )
   )
   )
-(vec (map
-      #(snmpgetv2 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"]))
+(comment
+  (vec
+   (map
+    #(getv2 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"])))

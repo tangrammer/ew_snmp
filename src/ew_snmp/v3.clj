@@ -1,5 +1,5 @@
 (ns ew_snmp.v3
-  (:use [ew_snmp.falcao :only (response? )])
+  (:use [ew_snmp.v2 :only (response? )])
   (:import
    [org.snmp4j ScopedPDU Snmp PDU CommunityTarget UserTarget]
    [org.snmp4j.security USM SecurityProtocols AuthMD5 SecurityModels UsmUser SecurityLevel PrivDES]

@@ -35,13 +35,11 @@ class HelloJava {
 
 
 
-# Resources
+# Resources used on development
 https://github.com/tangrammer/ew_snmp/wiki/Resources-used-on-prototype-development
 
+# clojure doc api
+http://tangrammer.github.com/ew_snmp/
 
-## License
-
-Copyright © 2014
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+# java doc api
+https://github.com/tangrammer/ew_snmp/wiki/Java-API

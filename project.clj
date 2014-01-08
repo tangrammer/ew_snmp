@@ -7,4 +7,5 @@
                  [org.snmp4j/snmp4j "2.2.3"]]
   :repositories {"snmp4j" "https://oosnmp.net/dist/release"}
   :aot [ew_snmp.SNMPApi]
+  :plugins [[lein-marginalia "0.7.1"]]
 )
