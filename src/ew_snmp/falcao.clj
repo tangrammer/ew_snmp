@@ -7,6 +7,7 @@
     [org.snmp4j.smi OID VariableBinding OctetString GenericAddress]
     [java.net InetAddress]
     )
+  (:gen-class :methods [#^{:static true} [v1 [String String String] String]])
   )
 
 (defn build-target [host community]
@@ -40,6 +41,7 @@
 ;(response? nil)
 
 
+
 (defn snmpgetv1 [host community & oid]
   (do
     (def pdu (build-pdu oid))
@@ -60,3 +62,8 @@
   )
 (vec (map
       #(snmpgetv1 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"]))
+
+(defn -v1 [h c oid]
+  (first (snmpgetv1 h c oid))
+  )
+(-v1 "localhost" "public" "1.3.6.1.2.1.1.5.0")
