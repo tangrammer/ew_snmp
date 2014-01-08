@@ -12,6 +12,6 @@
 (-v2 "localhost" "public" "1.3.6.1.2.1.1.5.0")
 
 
-(defn -v3 [u p oid]
-  (first (getv3 u p oid)))
-(-v3 "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.5.0")
+(defn -v3 [ip u p oid]
+  (first (getv3 ip u p oid)))
+(-v3 "localhost" "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.5.0")

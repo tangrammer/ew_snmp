@@ -18,6 +18,27 @@ $ java -cp '.:ew_snmp-0.1.0-standalone.jar' HelloJava
 >> Vigor21
 ```
 
+The HelloJava.java class
+```
+import ew_snmp.SNMPApi;
+
+
+class HelloJava {
+    public static void main(String[] args) {
+        System.out.println("Hello from Java!");
+        System.out.println(SNMPApi.v2 ("localhost", "public", "1.3.6.1.2.1.1.5.0"));
+        System.out.println(SNMPApi.v3 ("localhost", "juanv3", "comomolalagramola", "1.3.6.1.2.1.1.5.0"));
+    }
+}
+
+```
+
+
+
+# Resources
+https://github.com/tangrammer/ew_snmp/wiki/Resources-used-on-prototype-development
+
+
 ## License
 
 Copyright © 2014

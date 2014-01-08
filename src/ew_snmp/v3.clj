@@ -12,7 +12,7 @@
   (:gen-class :methods [#^{:static true} [v3 [String String String] String]])
   )
 
-(def ip-address "localhost")
+
 (def port "161")
 
 (defn build-pdu [oid]
@@ -24,7 +24,7 @@
   )
 
 
-(defn getv3 [user-name user-pass & oid]
+(defn getv3 [ip-address user-name user-pass & oid]
   (let [pdu (build-pdu oid)
         usm (USM. (SecurityProtocols/getInstance) (OctetString. (MPv3/createLocalEngineID) ) 0)]
     (.addSecurityModel (SecurityModels/getInstance) usm)
@@ -35,10 +35,6 @@
           usm-user (UsmUser. user-name-octet  AuthMD5/ID (OctetString. user-pass) PrivDES/ID (OctetString. user-pass))
           ]
       (.addUser (.getUSM snmp) user-name-octet usm-user)
-
-                                        ;todo
-
-
       (.setAddress user-target address)
       (.setVersion user-target SnmpConstants/version3)
       (.setRetries user-target 0)
