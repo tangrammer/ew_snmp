@@ -3035,16 +3035,15 @@ net.brehaut.ClojureTools = (function (SH) {
         [ew_snmp.v3 :only [ getv3]])
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
-               #^{:static true} [v3 [String String String] String]]))</pre></td></tr><tr><td class="docs"><p>host comm eso y eso
-  y otra cosa ,as </p>
+               #^{:static true} [v3 [String String String] String]]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v2
   [h c oid]
-  (first (getv2 h c oid)))
-(comment
-  (-v2 &quot;localost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="docs">
+  (first (getv2 h c oid)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v3 [ip u p oid]
-  (first (getv3 ip u p oid)))
-(comment
+  (first (getv3 ip u p oid)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(comment
+  (-v2 &quot;localost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(comment
   (-v3 &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew-snmp.core" name="ew-snmp.core"><h1 class="project-name">ew-snmp.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns ew-snmp.core
   (:import [java.io IOException]
@@ -3081,7 +3080,10 @@ net.brehaut.ClojureTools = (function (SH) {
   (let [ transport (DefaultUdpTransportMapping.)
         -snmp (Snmp. transport)]
     (def snmp -snmp)
-    (.listen transport)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    (.listen transport)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>this ns try to encapsulate all the knowledge releated with NSMP v2c</h2>
+
+<p>so far only we worried about "get" actions
+maybe differents types of community-target, pdus and GET options (GET, GETNEXT, GETBULK)</p>
 </td><td class="codes"><pre class="brush: clojure">(ns ew_snmp.v2
   (:import
     [org.snmp4j Snmp PDU CommunityTarget]
@@ -3106,13 +3108,21 @@ net.brehaut.ClojureTools = (function (SH) {
     (.setType PDU/GET)
     (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (build-pdu '(&quot;1.3.6.1.2.1.1.3.0&quot; &quot;1.3.6.1.2.1.2.2.1.21.1&quot;)))</pre></td></tr><tr><td class="docs">
+  (build-pdu '(&quot;1.3.6.1.2.1.1.3.0&quot; &quot;1.3.6.1.2.1.2.2.1.21.1&quot;)))</pre></td></tr><tr><td class="docs"><p>checking response and by the way printing the response type on console</p>
 </td><td class="codes"><pre class="brush: clojure">(defn response? [response]
   (let [t (. response getType)]
     (println t)
    (and response (== (. response getType) PDU/RESPONSE))))
 (comment
-  (response? nil))</pre></td></tr><tr><td class="docs"><p>this function retuns an array [] of return values or exceptions cached</p>
+  (response? nil))</pre></td></tr><tr><td class="docs"><p><strong>core function</strong></p>
+
+<p>   this function retuns an array [] of return values or exceptions cached</p>
+
+<p>   <code>(= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))</code></p>
+
+<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))</code></p>
+
+<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn getv2 [host community &amp; oid]
   (try
     (do
@@ -3131,7 +3141,9 @@ net.brehaut.ClojureTools = (function (SH) {
                        (str xv))) (. response getVariableBindings)))))
     (catch NullPointerException e [(str  e)])))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (getv2 &quot;localhost&quot; &quot;public&quot; &quot;1&quot;)
+  (= [&quot;Right here, right now.&quot;] (getv2 &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.6.0&quot;))
+  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;error&quot; &quot;public&quot; &quot;1&quot;))
+  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;localhost&quot; &quot;error&quot; &quot;1&quot;))
   (vec
    (map
     #(getv2 &quot;localhost&quot; &quot;public&quot; % ) [&quot;1.3.6.1.2.1.1.5.0&quot; &quot;1.3.6.1.2.1.1.6.0&quot; &quot;.1.3.6.1.2.1.25.3.6.1.4&quot; &quot;1.3.6.1.2.1.31.1.1.1.1.0&quot; &quot;1.3.6.1.2.1.1.3.0&quot;])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v3" name="ew_snmp.v3"><h1 class="project-name">ew_snmp.v3</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
