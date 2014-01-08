@@ -3112,7 +3112,7 @@ net.brehaut.ClojureTools = (function (SH) {
     (println t)
    (and response (== (. response getType) PDU/RESPONSE))))
 (comment
-  (response? nil))</pre></td></tr><tr><td class="docs">
+  (response? nil))</pre></td></tr><tr><td class="docs"><p>this function retuns an array [] of return values or exceptions cached</p>
 </td><td class="codes"><pre class="brush: clojure">(defn getv2 [host community &amp; oid]
   (try
     (do
