@@ -39,6 +39,7 @@ class HelloJava {
 https://github.com/tangrammer/ew_snmp/wiki/Resources-used-on-prototype-development
 
 # clojure doc api
+`lein marg -f index.html`
 http://tangrammer.github.com/ew_snmp/
 
 # java doc api
