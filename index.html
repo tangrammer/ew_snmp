@@ -3041,7 +3041,7 @@ net.brehaut.ClojureTools = (function (SH) {
   [h c oid]
   (first (getv2 h c oid)))
 (comment
-  (-v2 &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="docs">
+  (-v2 &quot;localost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v3 [ip u p oid]
   (first (getv3 ip u p oid)))
 (comment
@@ -3089,43 +3089,49 @@ net.brehaut.ClojureTools = (function (SH) {
     [org.snmp4j.transport DefaultUdpTransportMapping]
     [org.snmp4j.event.ResponseEvent]
     [org.snmp4j.smi OID VariableBinding OctetString GenericAddress]
-    [java.net InetAddress]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn build-target [host community]
-  &quot;Returns CommunityTarget object&quot;
+    [java.net InetAddress]))</pre></td></tr><tr><td class="docs"><p>Returns CommunityTarget object</p>
+</td><td class="codes"><pre class="brush: clojure">(defn build-target
+  [host community]
   (doto (CommunityTarget.)
     (.setCommunity (new OctetString community))
     (.setAddress (GenericAddress/parse (format &quot;udp:%s/161&quot; host)))
     (.setVersion SnmpConstants/version2c)
     (.setRetries 0)
-    (.setTimeout 1000)))</pre></td></tr><tr><td class="docs"><p>(println (str "@" (build-target "host" "public")))</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn build-pdu [oid]
-  &quot;Build PDU Object&quot;
+    (.setTimeout 1000)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(comment
+  (println (str &quot;@&quot; (build-target &quot;host&quot; &quot;public&quot;))))</pre></td></tr><tr><td class="docs"><p>Build PDU Object</p>
+</td><td class="codes"><pre class="brush: clojure">(defn build-pdu
+  [oid]
   (doto (PDU.)
     (.setType PDU/GET)
-    (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))))</pre></td></tr><tr><td class="docs"><p>(build-pdu '("1.3.6.1.2.1.1.3.0" "1.3.6.1.2.1.2.2.1.21.1"))</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
+    (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(comment
+  (build-pdu '(&quot;1.3.6.1.2.1.1.3.0&quot; &quot;1.3.6.1.2.1.2.2.1.21.1&quot;)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn response? [response]
   (let [t (. response getType)]
     (println t)
-   (and response (== (. response getType) PDU/RESPONSE))))</pre></td></tr><tr><td class="docs"><p>(response? nil)</p>
-</td><td class="codes"></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn getv2 [host community &amp; oid]
-  (do
-    (def pdu (build-pdu oid))
-    (def target (build-target host community))
-    (def snmp (Snmp. (DefaultUdpTransportMapping.)))
-    (. snmp listen)
-    (def event (. snmp send pdu target nil))
-    (def response (. event getResponse))
-    (. snmp close)
-    (when (response? response)
-      ; return data.
-      (vec (map #(do
-               (let [xv (. % getVariable)]
-                 #_(println % xv)
-                 (str xv))) (. response getVariableBindings))))))
+   (and response (== (. response getType) PDU/RESPONSE))))
 (comment
+  (response? nil))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn getv2 [host community &amp; oid]
+  (try
+    (do
+      (def pdu (build-pdu oid))
+      (def target (build-target host community))
+      (def snmp (Snmp. (DefaultUdpTransportMapping.)))
+      (. snmp listen)
+      (def event (. snmp send pdu target nil))
+      (def response (. event getResponse))
+      (. snmp close)
+      (when (response? response)
+                                        ; return data.
+        (vec (map #(do
+                     (let [xv (. % getVariable)]
+                       #_(println % xv)
+                       (str xv))) (. response getVariableBindings)))))
+    (catch NullPointerException e [(str  e)])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(comment
+  (getv2 &quot;localhost&quot; &quot;public&quot; &quot;1&quot;)
   (vec
    (map
     #(getv2 &quot;localhost&quot; &quot;public&quot; % ) [&quot;1.3.6.1.2.1.1.5.0&quot; &quot;1.3.6.1.2.1.1.6.0&quot; &quot;.1.3.6.1.2.1.25.3.6.1.4&quot; &quot;1.3.6.1.2.1.31.1.1.1.1.0&quot; &quot;1.3.6.1.2.1.1.3.0&quot;])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v3" name="ew_snmp.v3"><h1 class="project-name">ew_snmp.v3</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
