@@ -12,6 +12,7 @@
 
 ;; # Defaults:
 ;; **TransportMappingProtocol:** UDP
+;;
 ;; **UDP-PORT get communication** 161
 
 
@@ -24,37 +25,46 @@
   (first (getv2 h c [oid]))
   )
 
-(defn -v2all [h c oid]
+(defn -v2all
   "SNMP v2c
+
    arguments: host, community-name, object-identifier
+
    return: objects array"
+  [h c oid]
   (to-array (getv2 h c [oid]))
   )
 
-(defn -v2allb [h c oid]
+(defn -v2allb
   "SNMP v2c
-   arguments: host, community-name, array object-identifiers
+   arguments: host, community-name, array object-identifiers \\
    return: objects array"
+  [h c oid]
   (to-array (getv2 h c oid))
   )
 
 
-(defn -v3 [ip u p oid]
+(defn -v3
   "SNMP v3
+
    arguments: host, user-name, user-password, object-identifier
+
    return: first object"
+  [ip u p oid]
   (first (getv3 ip u p [oid])))
 
-(defn -v3all [ip u p oid]
+(defn -v3all
   "SNMP v3
    arguments: host, user-name, user-password, object-identifier
    return: objects array"
+  [ip u p oid]
   (to-array (getv3 ip u p [oid])))
 
- (defn -v3allb [ip u p oid]
+ (defn -v3allb
   "SNMP v3
    arguments: host, user-name, user-password, array object-identifiers
    return: objects array"
+  [ip u p oid]
   (to-array (getv3 ip u p oid)))
 
 (comment
