@@ -3037,21 +3037,52 @@ net.brehaut.ClojureTools = (function (SH) {
               [#^{:static true} [v2 [String String String] String]
                #^{:static true} [v3 [String String String String] String]
                #^{:static true} [v2all [String String String] &quot;[Ljava.lang.Object;&quot;]
-               #^{:static true} [v3all [String String String String] &quot;[Ljava.lang.Object;&quot;]]))</pre></td></tr><tr><td class="docs">
+               #^{:static true} [v2allb [String String &quot;[Ljava.lang.Object;&quot;] &quot;[Ljava.lang.Object;&quot;]
+               #^{:static true} [v3all [String String String String] &quot;[Ljava.lang.Object;&quot;]
+               #^{:static true} [v3allb [String String String &quot;[Ljava.lang.Object;&quot;] &quot;[Ljava.lang.Object;&quot;]
+               ]))</pre></td></tr><tr><td class="docs"><h1>Defaults:</h1>
+
+<p><strong>TransportMappingProtocol:</strong> UDP
+<strong>UDP-PORT get communication</strong> 161</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>SNMP v2c
+   arguments: host, community-name, object-identifier
+   return: first object</p>
 </td><td class="codes"><pre class="brush: clojure">(defn -v2
   [h c oid]
-  (first (getv2 h c oid)))</pre></td></tr><tr><td class="docs">
+  (first (getv2 h c [oid])))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v2all [h c oid]
+  &quot;SNMP v2c
+   arguments: host, community-name, object-identifier
+   return: objects array&quot;
+  (to-array (getv2 h c [oid])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn -v2allb [h c oid]
+  &quot;SNMP v2c
+   arguments: host, community-name, array object-identifiers
+   return: objects array&quot;
   (to-array (getv2 h c oid)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v3 [ip u p oid]
-  (first (getv3 ip u p oid)))</pre></td></tr><tr><td class="docs">
+  &quot;SNMP v3
+   arguments: host, user-name, user-password, object-identifier
+   return: first object&quot;
+  (first (getv3 ip u p [oid])))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v3all [ip u p oid]
+  &quot;SNMP v3
+   arguments: host, user-name, user-password, object-identifier
+   return: objects array&quot;
+  (to-array (getv3 ip u p [oid])))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure"> (defn -v3allb [ip u p oid]
+  &quot;SNMP v3
+   arguments: host, user-name, user-password, array object-identifiers
+   return: objects array&quot;
   (to-array (getv3 ip u p oid)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
   (-v2 &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
   (-v2all &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
-  (-v3 &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
-  (-v3all &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>this ns try to encapsulate all the knowledge releated with NSMP v2c</h2>
+  (-v2allb &quot;localhost&quot; &quot;public&quot; [&quot;1.3.6.1.2.1.1.5.0&quot;])
+  (-v3 &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.6.0&quot;)
+  (-v3all &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
+  (-v3allb &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; [&quot;1.3.6.1.2.1.1.5.0&quot; &quot;1.3.6.1.2.1.1.6.0&quot;] )
+ )</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>this ns try to encapsulate all the knowledge releated with NSMP v2c</h2>
 
 <p>so far only we worried about "get" actions
 maybe differents types of community-target, pdus and GET options (GET, GETNEXT, GETBULK)</p>
@@ -3065,7 +3096,13 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
     [java.net InetAddress]))</pre></td></tr><tr><td class="docs"><p>Returns CommunityTarget object, it has only 3 fiels to be configurable
    name, security-model and security-level</p>
 
-<p>A CommunityTarget represents SNMP target properties for community based message processing models (SNMPv1 and SNMPv2c).</p>
+<p>A CommunityTarget represents SNMP target properties
+for community based message processing models (SNMPv1 and SNMPv2c).
+extends AbstractTarget functionality::
+clone, getAddress, getMaxSizeRequestPDU, getPreferredTransports,
+getRetries, getSecurityLevel, getSecurityName, getTimeout, getVersion,
+setAddress, setMaxSizeRequestPDU, setPreferredTransports, setRetries,
+setSecurityName, setTimeout, setVersion, toStringAbstractTarget</p>
 </td><td class="codes"><pre class="brush: clojure">(defn build-target
   [host community]
   (doto (CommunityTarget.)
@@ -3075,7 +3112,10 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
     (.setRetries 0)
     (.setTimeout 1000)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (println (str &quot;@&quot; (build-target &quot;host&quot; &quot;public&quot;))))</pre></td></tr><tr><td class="docs"><p>Build PDU Object</p>
+  (println (str &quot;@&quot; (build-target &quot;host&quot; &quot;public&quot;))))</pre></td></tr><tr><td class="docs"><p>The PDU class represents a SNMP protocol data unit.
+The PDU version supported by the BER decoding and encoding methods of this class is v2.
+The default PDU type is GET.</p>
+</td><td class="codes"></td></tr><tr><td class="docs"><p>Build PDU Object</p>
 </td><td class="codes"><pre class="brush: clojure">(defn build-pdu
   [oid]
   (doto (PDU.)
@@ -3088,21 +3128,23 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
     #_(println t)
    (and response (== (. response getType) PDU/RESPONSE))))
 (comment
-  (response? nil))</pre></td></tr><tr><td class="docs"><p><strong>core function</strong></p>
+  (response? nil))</pre></td></tr><tr><td class="docs"><p>The Snmp class is transport protocol independent.
+   Available TransportMapping implementations :
+   AbstractTransportMapping, DefaultSshTransportMapping,
+   DefaultTcpTransportMapping, DefaultUdpTransportMapping,
+   DummyTransport, DummyTransport.DummyTransportResponder,
+   TcpTransportMapping, TLSTM, UdpTransportMapping.</p>
 
-<p>   this function retuns an array [] of return values or exceptions cached</p>
-
-<p>   <code>(= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))</code></p>
-
-<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))</code></p>
-
-<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))</code></p>
+<p>   Transport mappings are used for incoming and outgoing messages.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn build-snmp
+  []
+  (Snmp. (DefaultUdpTransportMapping.)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn getv2 [host community &amp; oid]
   (try
     (do
-      (def pdu (build-pdu oid))
+      (def pdu (apply build-pdu oid))
       (def target (build-target host community))
-      (def snmp (Snmp. (DefaultUdpTransportMapping.)))
+      (def snmp (build-snmp))
       (. snmp listen)
       (def event (. snmp send pdu target nil))
       (def response (. event getResponse))
@@ -3113,14 +3155,26 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
                      (let [xv (. % getVariable)]
                        #_(println % xv)
                        (str xv))) (. response getVariableBindings)))))
-    (catch NullPointerException e [(str  e)])))</pre></td></tr><tr><td class="docs">
+    (catch NullPointerException e
+      (do
+        ;(println response)
+              [(str  e)]))))</pre></td></tr><tr><td class="docs"><p><strong>core function</strong></p>
+
+<p>   this getv2 fn retuns an array [] of return values or exceptions cached</p>
+
+<p>   <code>(= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))</code></p>
+
+<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))</code></p>
+
+<p>   <code>(= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))</code></p>
+</td><td class="codes"></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (= [&quot;Right here, right now.&quot;] (getv2 &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.6.0&quot;))
-  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;error&quot; &quot;public&quot; &quot;1&quot;))
-  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;localhost&quot; &quot;error&quot; &quot;1&quot;))
+  (= [&quot;Right here, right now.&quot;] (getv2 &quot;localhost&quot; &quot;public&quot; [&quot;1.3.6.1.2.1.1.6.0&quot;]))
+  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;error&quot; &quot;public&quot; [&quot;1&quot;]))
+  (= [&quot;java.lang.NullPointerException&quot;] (getv2 &quot;localhost&quot; &quot;error&quot; [&quot;1&quot;]))
   (vec
    (map
-    #(getv2 &quot;localhost&quot; &quot;public&quot; % ) [&quot;1.3.6.1.2.1.1.5.0&quot; &quot;1.3.6.1.2.1.1.6.0&quot; &quot;.1.3.6.1.2.1.25.3.6.1.4&quot; &quot;1.3.6.1.2.1.31.1.1.1.1.0&quot; &quot;1.3.6.1.2.1.1.3.0&quot;])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v3" name="ew_snmp.v3"><h1 class="project-name">ew_snmp.v3</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    #(getv2 &quot;localhost&quot; &quot;public&quot; [%] ) [&quot;1.3.6.1.2.1.1.5.0&quot; &quot;1.3.6.1.2.1.1.6.0&quot; &quot;.1.3.6.1.2.1.25.3.6.1.4&quot; &quot;1.3.6.1.2.1.31.1.1.1.1.0&quot; &quot;1.3.6.1.2.1.1.3.0&quot;])))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v3" name="ew_snmp.v3"><h1 class="project-name">ew_snmp.v3</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns ew_snmp.v3
   (:use [ew_snmp.v2 :only (response? )])
   (:import
@@ -3132,14 +3186,16 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
    [org.snmp4j.smi OID VariableBinding OctetString GenericAddress UdpAddress IpAddress]
    [java.net InetAddress])
   (:gen-class :methods [#^{:static true} [v3 [String String String] String]]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def port &quot;161&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn build-pdu [oid]
-  &quot;Build PDU Object&quot;
+</td><td class="codes"><pre class="brush: clojure">(def port &quot;161&quot;)</pre></td></tr><tr><td class="docs"><p>Build ScopedPDU Object</p>
+
+<p>The ScopedPDU class represents a SNMPv3 scoped PDU.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn build-pdu
+  [oid]
   (doto (ScopedPDU.)
     (.setType PDU/GETBULK)
     (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn getv3 [ip-address user-name user-pass &amp; oid]
-  (let [pdu (build-pdu oid)
+  (let [pdu (apply build-pdu oid)
         usm (USM. (SecurityProtocols/getInstance) (OctetString. (MPv3/createLocalEngineID) ) 0)]
     (.addSecurityModel (SecurityModels/getInstance) usm)
     (let [snmp (Snmp. (DefaultUdpTransportMapping.))
