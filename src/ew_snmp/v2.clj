@@ -44,7 +44,7 @@
 ;; checking response and by the way printing the response type on console
 (defn response? [response]
   (let [t (. response getType)]
-    (println t)
+    #_(println t)
    (and response (== (. response getType) PDU/RESPONSE)))
   )
 (comment
