@@ -3029,58 +3029,29 @@ net.brehaut.ClojureTools = (function (SH) {
   };
 })(SyntaxHighlighter);
 </script><title>ew_snmp -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">ew_snmp</h1><h2 class="project-version">0.1.0</h2><br /><p>SNMP and SNMP from clojure</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.snmp4j/snmp4j</td><td class="dotted"><hr /></td><td class="dep-version">2.2.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#ew_snmp.SNMPApi">ew_snmp.SNMPApi</a></li><li><a href="#ew-snmp.core">ew-snmp.core</a></li><li><a href="#ew_snmp.v2">ew_snmp.v2</a></li><li><a href="#ew_snmp.v3">ew_snmp.v3</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.SNMPApi" name="ew_snmp.SNMPApi"><h1 class="project-name">ew_snmp.SNMPApi</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.snmp4j/snmp4j</td><td class="dotted"><hr /></td><td class="dep-version">2.2.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#ew_snmp.SNMPApi">ew_snmp.SNMPApi</a></li><li><a href="#ew_snmp.v2">ew_snmp.v2</a></li><li><a href="#ew_snmp.v3">ew_snmp.v3</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.SNMPApi" name="ew_snmp.SNMPApi"><h1 class="project-name">ew_snmp.SNMPApi</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns ew_snmp.SNMPApi
   (:use [ew_snmp.v2 :only [ getv2]]
         [ew_snmp.v3 :only [ getv3]])
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
-               #^{:static true} [v3 [String String String] String]]))</pre></td></tr><tr><td class="docs">
+               #^{:static true} [v3 [String String String String] String]
+               #^{:static true} [v2all [String String String] &quot;[Ljava.lang.Object;&quot;]
+               #^{:static true} [v3all [String String String String] &quot;[Ljava.lang.Object;&quot;]]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v2
   [h c oid]
   (first (getv2 h c oid)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn -v2all [h c oid]
+  (to-array (getv2 h c oid)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defn -v3 [ip u p oid]
   (first (getv3 ip u p oid)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defn -v3all [ip u p oid]
+  (to-array (getv3 ip u p oid)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(comment
-  (-v2 &quot;localost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(comment
-  (-v3 &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew-snmp.core" name="ew-snmp.core"><h1 class="project-name">ew-snmp.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(ns ew-snmp.core
-  (:import [java.io IOException]
-           [org.snmp4j TransportMapping Snmp PDU CommunityTarget]
-           [org.snmp4j.mp SnmpConstants]
-           [org.snmp4j.transport DefaultUdpTransportMapping]
-           [org.snmp4j.event ResponseEvent]
-           [org.snmp4j.smi OID OctetString VariableBinding UdpAddress GenericAddress]))
-(def address &quot;udp:127.0.0.1/161&quot;)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(declare snmp)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-target []
-  (let [target-address (GenericAddress/parse address)
-        target (CommunityTarget.)]
-    (.setCommunity target (OctetString. &quot;public&quot;))
-    (.setAddress target target-address)
-    (.setRetries target 2)
-    (.setTimeout target 1500)
-    (.setVersion target (SnmpConstants/version2c))
-    target))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get [oids]
-  (let [pdu (PDU.)]
-    (doall (map #(.add pdu (VariableBinding. %)) oids))
-    (.setType pdu PDU/GET)
-    (if-let [send-event (.send snmp pdu (get-target) nil)]
-      send-event
-      (do
-        (println &quot;RUNTIME EXCEPTION&quot;)
-        (throw (RuntimeException. &quot;GET timed out!&quot;))))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn get-as-string [oid]
-  #_(let [oid-p ([oid])
-        event (get oid-p)]
-    (.. event (.getResponse) (.get 0) (.getVariable) (.toString))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn start []
-  (let [ transport (DefaultUdpTransportMapping.)
-        -snmp (Snmp. transport)]
-    (def snmp -snmp)
-    (.listen transport)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>this ns try to encapsulate all the knowledge releated with NSMP v2c</h2>
+  (-v2 &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
+  (-v2all &quot;localhost&quot; &quot;public&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
+  (-v3 &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;)
+  (-v3all &quot;127.0.0.1&quot; &quot;juanv3&quot; &quot;comomolalagramola&quot; &quot;1.3.6.1.2.1.1.5.0&quot;))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.v2" name="ew_snmp.v2"><h1 class="project-name">ew_snmp.v2</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h2>this ns try to encapsulate all the knowledge releated with NSMP v2c</h2>
 
 <p>so far only we worried about "get" actions
 maybe differents types of community-target, pdus and GET options (GET, GETNEXT, GETBULK)</p>
@@ -3091,11 +3062,14 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
     [org.snmp4j.transport DefaultUdpTransportMapping]
     [org.snmp4j.event.ResponseEvent]
     [org.snmp4j.smi OID VariableBinding OctetString GenericAddress]
-    [java.net InetAddress]))</pre></td></tr><tr><td class="docs"><p>Returns CommunityTarget object</p>
+    [java.net InetAddress]))</pre></td></tr><tr><td class="docs"><p>Returns CommunityTarget object, it has only 3 fiels to be configurable
+   name, security-model and security-level</p>
+
+<p>A CommunityTarget represents SNMP target properties for community based message processing models (SNMPv1 and SNMPv2c).</p>
 </td><td class="codes"><pre class="brush: clojure">(defn build-target
   [host community]
   (doto (CommunityTarget.)
-    (.setCommunity (new OctetString community))
+    (.setCommunity (OctetString. community))
     (.setAddress (GenericAddress/parse (format &quot;udp:%s/161&quot; host)))
     (.setVersion SnmpConstants/version2c)
     (.setRetries 0)
@@ -3111,7 +3085,7 @@ maybe differents types of community-target, pdus and GET options (GET, GETNEXT, 
   (build-pdu '(&quot;1.3.6.1.2.1.1.3.0&quot; &quot;1.3.6.1.2.1.2.2.1.21.1&quot;)))</pre></td></tr><tr><td class="docs"><p>checking response and by the way printing the response type on console</p>
 </td><td class="codes"><pre class="brush: clojure">(defn response? [response]
   (let [t (. response getType)]
-    (println t)
+    #_(println t)
    (and response (== (. response getType) PDU/RESPONSE))))
 (comment
   (response? nil))</pre></td></tr><tr><td class="docs"><p><strong>core function</strong></p>
