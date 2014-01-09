@@ -14,9 +14,10 @@
 
 
 (def port "161")
-
-(defn build-pdu [oid]
-  "Build PDU Object"
+;; The ScopedPDU class represents a SNMPv3 scoped PDU.
+(defn build-pdu
+  "Build ScopedPDU Object"
+  [oid]
   (doto (ScopedPDU.)
     (.setType PDU/GETBULK)
     (.addAll (into-array (map #(VariableBinding. (OID. (str %))) oid)))
@@ -25,7 +26,7 @@
 
 
 (defn getv3 [ip-address user-name user-pass & oid]
-  (let [pdu (build-pdu oid)
+  (let [pdu (apply build-pdu oid)
         usm (USM. (SecurityProtocols/getInstance) (OctetString. (MPv3/createLocalEngineID) ) 0)]
     (.addSecurityModel (SecurityModels/getInstance) usm)
     (let [snmp (Snmp. (DefaultUdpTransportMapping.))

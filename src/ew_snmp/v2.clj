@@ -14,7 +14,13 @@
 
 
 
-;; A CommunityTarget represents SNMP target properties for community based message processing models (SNMPv1 and SNMPv2c).
+;; A CommunityTarget represents SNMP target properties
+;; for community based message processing models (SNMPv1 and SNMPv2c).
+;; extends AbstractTarget functionality::
+;; clone, getAddress, getMaxSizeRequestPDU, getPreferredTransports,
+;; getRetries, getSecurityLevel, getSecurityName, getTimeout, getVersion,
+;; setAddress, setMaxSizeRequestPDU, setPreferredTransports, setRetries,
+;; setSecurityName, setTimeout, setVersion, toStringAbstractTarget
 (defn build-target
   "Returns CommunityTarget object, it has only 3 fiels to be configurable
    name, security-model and security-level"
@@ -31,6 +37,10 @@
 
 (comment
   (println (str "@" (build-target "host" "public"))))
+
+;; The PDU class represents a SNMP protocol data unit.
+;; The PDU version supported by the BER decoding and encoding methods of this class is v2.
+;; The default PDU type is GET.
 
 (defn build-pdu
   "Build PDU Object"
@@ -54,28 +64,31 @@
 (comment
   (response? nil))
 
-;; **core function**
-;;
-;;    this function retuns an array [] of return values or exceptions cached
-;;
-;;    `(= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))`
-;;
-;;    `(= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))`
-;;
-;;    `(= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))`
-;;
+(defn build-snmp
+  "The Snmp class is transport protocol independent.
+   Available TransportMapping implementations :
+   AbstractTransportMapping, DefaultSshTransportMapping,
+   DefaultTcpTransportMapping, DefaultUdpTransportMapping,
+   DummyTransport, DummyTransport.DummyTransportResponder,
+   TcpTransportMapping, TLSTM, UdpTransportMapping.
+
+   Transport mappings are used for incoming and outgoing messages."
+  []
+  (Snmp. (DefaultUdpTransportMapping.)))
+
 (defn getv2 [host community & oid]
   (try
 
     (do
-      (def pdu (build-pdu oid))
+      (def pdu (apply build-pdu oid))
       (def target (build-target host community))
-      (def snmp (Snmp. (DefaultUdpTransportMapping.)))
+      (def snmp (build-snmp))
       (. snmp listen)
 
       (def event (. snmp send pdu target nil))
       (def response (. event getResponse))
       (. snmp close)
+
       (when (response? response)
                                         ; return data.
         (vec (map #(do
@@ -84,13 +97,28 @@
                        (str xv))) (. response getVariableBindings)))
         )
       )
-    (catch NullPointerException e [(str  e)]))
+    (catch NullPointerException e
+      (do
+        ;(println response)
+              [(str  e)])))
   )
 
+
+;; **core function**
+;;
+;;    this getv2 fn retuns an array [] of return values or exceptions cached
+;;
+;;    `(= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))`
+;;
+;;    `(= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))`
+;;
+;;    `(= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))`
+;;
+
 (comment
-  (= ["Right here, right now."] (getv2 "localhost" "public" "1.3.6.1.2.1.1.6.0"))
-  (= ["java.lang.NullPointerException"] (getv2 "error" "public" "1"))
-  (= ["java.lang.NullPointerException"] (getv2 "localhost" "error" "1"))
+  (= ["Right here, right now."] (getv2 "localhost" "public" ["1.3.6.1.2.1.1.6.0"]))
+  (= ["java.lang.NullPointerException"] (getv2 "error" "public" ["1"]))
+  (= ["java.lang.NullPointerException"] (getv2 "localhost" "error" ["1"]))
   (vec
    (map
-    #(getv2 "localhost" "public" % ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"])))
+    #(getv2 "localhost" "public" [%] ) ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0" ".1.3.6.1.2.1.25.3.6.1.4" "1.3.6.1.2.1.31.1.1.1.1.0" "1.3.6.1.2.1.1.3.0"])))
