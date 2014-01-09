@@ -12,12 +12,16 @@
     )
   )
 
+
+
+;; A CommunityTarget represents SNMP target properties for community based message processing models (SNMPv1 and SNMPv2c).
 (defn build-target
-  "Returns CommunityTarget object"
+  "Returns CommunityTarget object, it has only 3 fiels to be configurable
+   name, security-model and security-level"
   [host community]
 
   (doto (CommunityTarget.)
-    (.setCommunity (new OctetString community))
+    (.setCommunity (OctetString. community))
     (.setAddress (GenericAddress/parse (format "udp:%s/161" host)))
     (.setVersion SnmpConstants/version2c)
     (.setRetries 0)
