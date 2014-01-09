@@ -10,29 +10,52 @@
                #^{:static true} [v3allb [String String String "[Ljava.lang.Object;"] "[Ljava.lang.Object;"]
                ]))
 
+;; # Defaults:
+;; **TransportMappingProtocol:** UDP
+;; **UDP-PORT get communication** 161
+
+
 
 (defn -v2
+  "SNMP v2c
+   arguments: host, community-name, object-identifier
+   return: first object"
   [h c oid]
   (first (getv2 h c [oid]))
   )
 
 (defn -v2all [h c oid]
+  "SNMP v2c
+   arguments: host, community-name, object-identifier
+   return: objects array"
   (to-array (getv2 h c [oid]))
   )
 
 (defn -v2allb [h c oid]
+  "SNMP v2c
+   arguments: host, community-name, array object-identifiers
+   return: objects array"
   (to-array (getv2 h c oid))
   )
 
 
 (defn -v3 [ip u p oid]
+  "SNMP v3
+   arguments: host, user-name, user-password, object-identifier
+   return: first object"
   (first (getv3 ip u p [oid])))
 
 (defn -v3all [ip u p oid]
+  "SNMP v3
+   arguments: host, user-name, user-password, object-identifier
+   return: objects array"
   (to-array (getv3 ip u p [oid])))
 
  (defn -v3allb [ip u p oid]
-          (to-array (getv3 ip u p oid)))
+  "SNMP v3
+   arguments: host, user-name, user-password, array object-identifiers
+   return: objects array"
+  (to-array (getv3 ip u p oid)))
 
 (comment
   (-v2 "localhost" "public" "1.3.6.1.2.1.1.5.0")
