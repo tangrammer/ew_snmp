@@ -1,3 +1,9 @@
+;; # GEN-CLASS to use from java environment once we have the standalone library
+;;
+;; ### Defaults:
+;; **TransportMappingProtocol:** UDP
+;;
+;; **UDP-PORT get communication** 161
 (ns ew_snmp.SNMPApi
   (:use [ew_snmp.v2 :only [ getv2]]
         [ew_snmp.v3 :only [ getv3]])
@@ -10,62 +16,55 @@
                #^{:static true} [v3allb [String String String "[Ljava.lang.Object;"] "[Ljava.lang.Object;"]
                ]))
 
-;; # Defaults:
-;; **TransportMappingProtocol:** UDP
-;;
-;; **UDP-PORT get communication** 161
 
+;; # SNMP version 2
+;; ---
 
 
 (defn -v2
-  "SNMP v2c
-   arguments: host, community-name, object-identifier
-   return: first object"
+  "**v2**: usefull in case to have a single oid and want to return single string value
+> [host, community-name, object-identifier] => String: first object"
   [h c oid]
   (first (getv2 h c [oid]))
   )
 
 (defn -v2all
-  "SNMP v2c
-
-   arguments: host, community-name, object-identifier
-
-   return: objects array"
+  "**v2all**: in case to have a single oid and want to return a array of string values
+> [host, community-name, object-identifier] => [String]: all objects
+"
   [h c oid]
   (to-array (getv2 h c [oid]))
   )
 
 (defn -v2allb
-  "SNMP v2c
-   arguments: host, community-name, array object-identifiers \\
-   return: objects array"
+  "**v2allb**: we pass an array of oids to obtain an array of values according to
+> [host, community-name, array object-identifiers] => [String]: objects array"
   [h c oid]
   (to-array (getv2 h c oid))
   )
 
+;; # SNMP version 3
+;; ---
 
 (defn -v3
-  "SNMP v3
-
-   arguments: host, user-name, user-password, object-identifier
-
-   return: first object"
+  "**v3**: usefull in case to have a single oid and want to return single string value
+> [host, community-name, object-identifier] => String: first object"
   [ip u p oid]
   (first (getv3 ip u p [oid])))
 
 (defn -v3all
-  "SNMP v3
-   arguments: host, user-name, user-password, object-identifier
-   return: objects array"
+    "**v3all**: in case to have a single oid and want to return a array of string values
+> [host, community-name, object-identifier] => [String]: all objects
+"
   [ip u p oid]
   (to-array (getv3 ip u p [oid])))
 
  (defn -v3allb
-  "SNMP v3
-   arguments: host, user-name, user-password, array object-identifiers
-   return: objects array"
+   "**v3allb**: we pass an array of oids to obtain an array of values according to
+> [host, community-name, array object-identifiers] => [String]: objects array"
   [ip u p oid]
   (to-array (getv3 ip u p oid)))
+
 
 (comment
   (-v2 "localhost" "public" "1.3.6.1.2.1.1.5.0")
@@ -75,3 +74,32 @@
   (-v3all "127.0.0.1" "juanv3" "comomolalagramola" "1.3.6.1.2.1.1.5.0")
   (-v3allb "127.0.0.1" "juanv3" "comomolalagramola" ["1.3.6.1.2.1.1.5.0" "1.3.6.1.2.1.1.6.0"] )
  )
+
+;; # example of use from java
+;;
+;;     import ew_snmp.SNMPApi
+;;     class HelloJava {
+;;     public  static void  printArray(Object[] array)
+;;     {
+;;         for (int i = 0; i < array.length; i++)
+;;             {
+;;                 System.out.println("array:" + array[i]);
+;;             }
+;;     }
+;;     public static void main(String[] args) {
+;;         System.out.println("Hello from Java!");
+;;         System.out.println("v2: "+SNMPApi.v2 ("localhost", "public", "1.3.6.1.2.1.1.5.0"));
+;;         System.out.println("v2all:");
+;;         HelloJava.printArray(SNMPApi.v2all ("localhost", "public", "1.3.6.1.2.1.1.5.0"));
+;;         System.out.println("v2allb:");
+;;         HelloJava.printArray(SNMPApi.v2allb ("localhost", "public", new String[] {"1.3.6.1.2.1.1.5.0", "1.3.6.1.2.1.1.6.0"}));
+;;         System.out.println("v3: "+SNMPApi.v3 ("localhost", "juanv3", "comomolalagramola", "1.3.6.1.2.1.1.5.0"));
+;;         System.out.println("v3all:");
+;;         HelloJava.printArray(SNMPApi.v3all ("localhost","juanv3", "comomolalagramola", "1.3.6.1.2.1.1.5.0"));
+;;         System.out.println("v3allb:");
+;;         HelloJava.printArray(SNMPApi.v3allb ("localhost","juanv3", "comomolalagramola", new String[] {"1.3.6.1.2.1.1.5.0", "1.3.6.1.2.1.1.6.0"}));
+;;         System.out.println("ERROR HOST: return java.lang.NullPointerException:  "+SNMPApi.v2 ("error-host", "public", "1.3.6.1.2.1.1.5.0"));
+;;         System.out.println("ERROR community name return java.lang.NullPointerException:  "+SNMPApi.v2 ("localhost", "error-community", "1.3.6.1.2.1.1.5.0"));
+;;     }
+;; }
+;;
