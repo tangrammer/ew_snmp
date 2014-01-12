@@ -6,9 +6,14 @@
 ;; **UDP-PORT get communication** 161
 (ns ew_snmp.SNMPApi
   (:use [ew_snmp.v2 :only [ getv2]]
-        [ew_snmp.v3 :only [ getv3]])
+        [ew_snmp.v3 :only [ getv3]]
+        )
+  (:import [org.json JSONObject])
+
+
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
+               #^{:static true} [v2Json [String String String] org.json.JSONObject]
                #^{:static true} [v3 [String String String String] String]
                #^{:static true} [v2all [String String String] "[Ljava.lang.Object;"]
                #^{:static true} [v2allb [String String "[Ljava.lang.Object;"] "[Ljava.lang.Object;"]
@@ -16,11 +21,13 @@
                #^{:static true} [v3allb [String String String "[Ljava.lang.Object;"] "[Ljava.lang.Object;"]
                ]))
 
-
+;(json/write-str {:a 1 :b 2})
 ;; # SNMP version 2
 ;; ---
 
+(doto (JSONObject.) (.put "JSON" "hello world") (.toString))
 
+(comment new JSONObject().put("JSON", "Hello, World!").toString())
 (defn -v2
   "**v2**: usefull in case to have a single oid and want to return single string value
 > [host, community-name, object-identifier] => String: first object"
@@ -28,6 +35,10 @@
   (first (getv2 h c [oid]))
   )
 
+
+(defn -v2Json [h c oid]
+  (doto (JSONObject.) (.put "JSON" "hello world"))
+  )
 (defn -v2all
   "**v2all**: in case to have a single oid and want to return a array of string values
 > [host, community-name, object-identifier] => [String]: all objects
