@@ -3029,7 +3029,7 @@ net.brehaut.ClojureTools = (function (SH) {
   };
 })(SyntaxHighlighter);
 </script><title>ew_snmp -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">ew_snmp</h1><h2 class="project-version">0.1.0</h2><br /><p>SNMP and SNMP from clojure</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.snmp4j/snmp4j</td><td class="dotted"><hr /></td><td class="dep-version">2.2.3</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#ew_snmp.SNMPApi">ew_snmp.SNMPApi</a></li><li><a href="#ew_snmp.v2">ew_snmp.v2</a></li><li><a href="#ew_snmp.v3">ew_snmp.v3</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.SNMPApi" name="ew_snmp.SNMPApi"><h1 class="project-name">ew_snmp.SNMPApi</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>GEN-CLASS to use from java environment once we have the standalone library</h1>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr><tr><td class="dep-name">org.snmp4j/snmp4j</td><td class="dotted"><hr /></td><td class="dep-version">2.2.3</td></tr><tr><td class="dep-name">org.json/json</td><td class="dotted"><hr /></td><td class="dep-version">20131018</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#ew_snmp.SNMPApi">ew_snmp.SNMPApi</a></li><li><a href="#ew_snmp.v2">ew_snmp.v2</a></li><li><a href="#ew_snmp.v3">ew_snmp.v3</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#ew_snmp.SNMPApi" name="ew_snmp.SNMPApi"><h1 class="project-name">ew_snmp.SNMPApi</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs"><h1>GEN-CLASS to use from java environment once we have the standalone library</h1>
 
 <h3>Defaults:</h3>
 
@@ -3039,24 +3039,45 @@ net.brehaut.ClojureTools = (function (SH) {
 </td><td class="codes"><pre class="brush: clojure">(ns ew_snmp.SNMPApi
   (:use [ew_snmp.v2 :only [ getv2]]
         [ew_snmp.v3 :only [ getv3]])
+  (:import [org.json JSONObject])
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
+               #^{:static true} [v2Json [String String String] org.json.JSONObject]
+               #^{:static true} [v2JsonInOut [org.json.JSONObject] org.json.JSONObject]
                #^{:static true} [v3 [String String String String] String]
                #^{:static true} [v2all [String String String] &quot;[Ljava.lang.Object;&quot;]
                #^{:static true} [v2allb [String String &quot;[Ljava.lang.Object;&quot;] &quot;[Ljava.lang.Object;&quot;]
                #^{:static true} [v3all [String String String String] &quot;[Ljava.lang.Object;&quot;]
                #^{:static true} [v3allb [String String String &quot;[Ljava.lang.Object;&quot;] &quot;[Ljava.lang.Object;&quot;]
-               ]))</pre></td></tr><tr><td class="docs"><h1>SNMP version 2</h1>
+               ]))</pre></td></tr><tr><td class="docs"><p>(json/write-str {:a 1 :b 2})</p>
+
+<h1>SNMP version 2</h1>
 
 <hr />
-</td><td class="codes"></td></tr><tr><td class="docs"><p><strong>v2</strong>: usefull in case to have a single oid and want to return single string value</p>
+</td><td class="codes"></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(doto (JSONObject.) (.put &quot;JSON&quot; &quot;hello world&quot;) (.toString))</pre></td></tr><tr><td class="docs"><p><strong>v2</strong>: usefull in case to have a single oid and want to return single string value</p>
 
 <blockquote>
   <p>[host, community-name, object-identifier] => String: first object</p>
 </blockquote>
-</td><td class="codes"><pre class="brush: clojure">(defn -v2
+</td><td class="codes"><pre class="brush: clojure">(comment new JSONObject().put(&quot;JSON&quot;, &quot;Hello, World!&quot;).toString())
+(defn -v2
   [h c oid]
-  (first (getv2 h c [oid])))</pre></td></tr><tr><td class="docs"><p><strong>v2all</strong>: in case to have a single oid and want to return a array of string values</p>
+  (first (getv2 h c [oid])))</pre></td></tr><tr><td class="docs"><p><strong>v2JsonInOut</strong>: in case to have a JSONObject with host, community-name and oid single oid and want to return a json with response value</p>
+
+<blockquote>
+  <p>[host, community-name, object-identifier] => org.json.JSONObject</p>
+</blockquote>
+</td><td class="codes"><pre class="brush: clojure">(defn -v2Json
+  [h c oid]
+  (doto (JSONObject.) (.put &quot;response&quot; (-v2 h c oid))))</pre></td></tr><tr><td class="docs"><p><strong>v2JsonInOut</strong>: in case to have a JSONObject with host, community-name and oid single oid and want to return a json with response value</p>
+
+<blockquote>
+  <p>[org.json.JSONObject {"host":"", "community-name":"", "oid":""}] => org.json.JSONObject</p>
+</blockquote>
+</td><td class="codes"><pre class="brush: clojure">(defn -v2JsonInOut
+  [in]
+  (doto (JSONObject.) (.put &quot;response&quot; (-v2Json (.get in &quot;host&quot;) (.get in &quot;community-name&quot;) (.get in &quot;oid&quot;)))))</pre></td></tr><tr><td class="docs"><p><strong>v2all</strong>: in case to have a single oid and want to return a array of string values</p>
 
 <blockquote>
   <p>[host, community-name, object-identifier] => [String]: all objects</p>
