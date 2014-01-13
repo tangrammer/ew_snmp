@@ -14,6 +14,7 @@
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
                #^{:static true} [v2Json [String String String] org.json.JSONObject]
+               #^{:static true} [v2JsonInOut [org.json.JSONObject] org.json.JSONObject]
                #^{:static true} [v3 [String String String String] String]
                #^{:static true} [v2all [String String String] "[Ljava.lang.Object;"]
                #^{:static true} [v2allb [String String "[Ljava.lang.Object;"] "[Ljava.lang.Object;"]
@@ -36,9 +37,25 @@
   )
 
 
-(defn -v2Json [h c oid]
-  (doto (JSONObject.) (.put "JSON" "hello world"))
+
+
+(defn -v2Json
+  "**v2JsonInOut**: in case to have a JSONObject with host, community-name and oid single oid and want to return a json with response value
+> [host, community-name, object-identifier] => org.json.JSONObject
+"
+  [h c oid]
+  (doto (JSONObject.) (.put "response" (-v2 h c oid)))
   )
+
+
+(defn -v2JsonInOut
+  "**v2JsonInOut**: in case to have a JSONObject with host, community-name and oid single oid and want to return a json with response value
+> [org.json.JSONObject {\"host\":\"\", \"community-name\":\"\", \"oid\":\"\"}] => org.json.JSONObject
+"
+  [in]
+  (doto (JSONObject.) (.put "response" (-v2Json (.get in "host") (.get in "community-name") (.get in "oid"))))
+  )
+
 (defn -v2all
   "**v2all**: in case to have a single oid and want to return a array of string values
 > [host, community-name, object-identifier] => [String]: all objects

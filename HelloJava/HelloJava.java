@@ -16,8 +16,13 @@ class HelloJava {
 
     public static void main(String[] args) {
         try{
-         System.out.println("Hello from Java!"+ new JSONObject().put("JSON", "Hello, World!").toString());
-         System.out.println("v2JSON: "+SNMPApi.v2Json ("localhost", "public", "1.3.6.1.2.1.1.5.0"));
+            JSONObject jsonObject= new JSONObject();
+            jsonObject.put("host", "localhost");
+            jsonObject.put("community-name", "public");
+            jsonObject.put("oid", "1.3.6.1.2.1.1.6.0");
+            System.out.println("Hello from Java!"+ jsonObject.toString());
+            System.out.println("v2JSON-IN-OUT: "+SNMPApi.v2JsonInOut (jsonObject));
+            System.out.println("v2JSON: "+SNMPApi.v2Json ("localhost", "public", "1.3.6.1.2.1.1.6.0"));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
