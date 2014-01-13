@@ -3,18 +3,10 @@ import ew_snmp.SNMPApi;
 import org.json.JSONObject;
 
 class HelloJava {
-    public  static void  printArray(Object[] array)
-    {
-        for (int i = 0; i < array.length; i++)
-            {
-                System.out.println("array:" + array[i]);
-            }
-
-
-    }
-
+    
 
     public static void main(String[] args) {
+    	
         try{
             JSONObject jsonObject= new JSONObject();
             jsonObject.put("host", "localhost");
@@ -45,4 +37,14 @@ class HelloJava {
 
         System.out.println("ERROR community name return java.lang.NullPointerException:  "+SNMPApi.v2 ("localhost", "error-community", "1.3.6.1.2.1.1.5.0"));
     }
+    public  static void  printArray(Object[] array)
+    {
+        for (int i = 0; i < array.length; i++)
+            {
+                System.out.println("array:" + array[i]);
+            }
+
+
+    }
+
 }
