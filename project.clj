@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.snmp4j/snmp4j "2.2.3"]
                  [org.json/json "20131018"]
+                 [org.clojure/data.json "0.2.4"]
+
 ]
   :repositories {"snmp4j" "https://oosnmp.net/dist/release"}
   :aot [ew_snmp.SNMPApi]

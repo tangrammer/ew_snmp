@@ -26,7 +26,7 @@
 ;; # SNMP version 2
 ;; ---
 
-(doto (JSONObject.) (.put "JSON" "hello world") (.toString))
+(doto (JSONObject.) (.put "JSON" "hello world") (.put "JJSON" "hello world") (.toString))
 
 (comment new JSONObject().put("JSON", "Hello, World!").toString())
 (defn -v2

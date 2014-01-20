@@ -9,6 +9,7 @@ class HelloJava {
     	
         try{
             JSONObject jsonObject= new JSONObject();
+            
             jsonObject.put("host", "localhost");
             jsonObject.put("community-name", "public");
             jsonObject.put("oid", "1.3.6.1.2.1.1.6.0");
