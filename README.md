@@ -57,7 +57,9 @@ public class SNMPCLJTest {
 
 ```
 
-# generating and using java library (requirements: Maven and Leiningen)
+# generating and using java library
+(requirements: Maven and Leiningen)
+
 **Generating java library and installing in local maven repo**
 
 Pay attention on version library (written on project.clj file)
