@@ -1,57 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>ew_snmp</groupId>
-  <artifactId>ew_snmp</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <groupId>com.enterpriseweb</groupId>
+  <artifactId>snmp-test</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1</version>
+  <name>snmp</name>
+  <description>SNMP4J wrapper</description>
+  <url>https://github.com/tangrammer/ew_snmp/</url>
+  <licenses>
+    <license>
+      <name>Eclipse Public License</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git://github.com/tangrammer/ew_snmp.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/tangrammer/ew_snmp.git</developerConnection>
+    <tag>468e2bc7a1000322880b7d32c99a2e55b2869e6f
+</tag>
+    <url>https://github.com/tangrammer/ew_snmp</url>
+  </scm>
   <build>
-    <sourceDirectory>HelloJava</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <resources>
       <resource>
-        <directory>HelloJava</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
+        <directory>resources</directory>
       </resource>
     </resources>
-    
+    <testResources>
+      <testResource>
+        <directory>dev-resources</directory>
+      </testResource>
+      <testResource>
+        <directory>resources</directory>
+      </testResource>
+    </testResources>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-    </plugins>
+    
+  </plugins>
   </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.json</groupId>
-  		<artifactId>json</artifactId>
-  		<version>20131018</version>
-  	</dependency>
-  		<dependency>
-  		<groupId>org.snmp4j</groupId>
-  		<artifactId>snmp4j</artifactId>
-  		<version>2.2.3</version>
-  	</dependency>
-  		<dependency>
-  		<groupId>org.clojure</groupId>
-  		<artifactId>clojure</artifactId>
-  		<version>1.5.1</version>
-  	</dependency>
-  		<dependency>
-  			<groupId>org.clojure</groupId>
-  			<artifactId>data.json</artifactId>
-  			<version>0.2.4</version>
-  		</dependency>
-  </dependencies>
   <repositories>
     <repository>
-      <id>snmp4j</id>
-      <url>https://oosnmp.net/dist/release/</url>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
- </repositories>
-  
+    <repository>
+      <id>clojars</id>
+      <url>https://clojars.org/repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>snmp4j</id>
+      <url>https://oosnmp.net/dist/release</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>1.5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.snmp4j</groupId>
+      <artifactId>snmp4j</artifactId>
+      <version>2.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20131018</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>data.json</artifactId>
+      <version>0.2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>tools.nrepl</artifactId>
+      <version>0.2.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.clojure</groupId>
+          <artifactId>clojure</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>clojure-complete</groupId>
+      <artifactId>clojure-complete</artifactId>
+      <version>0.2.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.clojure</groupId>
+          <artifactId>clojure</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.enterpriseweb</groupId>
+    	<artifactId>snmp</artifactId>
+    	<version>0.0.1</version>
+    </dependency>
+    <dependency>
+  <groupId>junit</groupId>
+  <artifactId>junit</artifactId>
+  <version>4.11</version>
+  <scope>test</scope>
+</dependency> 
+  </dependencies>
 </project>
+
+<!-- This file was autogenerated by Leiningen.
+  Please do not edit it directly; instead edit project.clj and regenerate it.
+  It should not be considered canonical data. For more information see
+  https://github.com/technomancy/leiningen -->

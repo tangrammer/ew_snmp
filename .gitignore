@@ -2,7 +2,6 @@
 /classes
 /checkouts
 *.jar
-!/HelloJava/*.jar
 *.class
 /.lein-*
 /.nrepl-port

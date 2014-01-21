@@ -1,6 +1,6 @@
-(defproject ew_snmp "0.1.1"
-  :description "SNMP and SNMP from clojure"
-  :url "http://example.com/FIXME"
+(defproject com.enterpriseweb/snmp "0.0.1"
+  :description "SNMP4J wrapper"
+  :url "https://github.com/tangrammer/ew_snmp/"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]

@@ -1,15 +1,16 @@
 package test;
 import org.json.JSONObject;
+import org.junit.Test;
 
 import com.enterpriseweb.snmp.V2;
 import com.enterpriseweb.snmp.V3;
+import static org.junit.Assert.*;
 
 
 
 public class SNMPCLJTest {
-
-	public static void main(String[] args) {
-		
+	@Test
+	public void testPrintHelloWorld() {
 		JSONObject jsonV2Object = createJSONV2Object("tcp", 261);
         System.out.println("V2 response: "+V2.json(jsonV2Object));
         //=> V2 response: {"response":["Right here, right now.","Vigor16"]}
@@ -17,6 +18,7 @@ public class SNMPCLJTest {
         JSONObject jsonV3Object = createJSONV3Object("tcp", 261);
         System.out.println("V3 response: "+V3.json(jsonV3Object));       
         //=> V3 response: {"response":["Right here, right now.","Vigor16"]}
+        assertTrue(true);
 
 	}
 
