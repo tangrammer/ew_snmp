@@ -59,7 +59,8 @@ public class SNMPCLJTest {
 
 # generating and using java library (requirements: Maven and Leiningen)
 **Generating java library and installing in local maven repo**
-* pay attention on version library (written on project.clj file)
+
+Pay attention on version library (written on project.clj file)
 ```
 $ cd ew_snmp
 $ lein clean
