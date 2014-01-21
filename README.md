@@ -74,7 +74,6 @@ $ maven test
 
 ```
 
-
 # Resources and documentation used on development
 https://github.com/tangrammer/ew_snmp/wiki/Resources-used-on-prototype-development
 
