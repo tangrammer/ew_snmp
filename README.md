@@ -70,9 +70,11 @@ $ lein install
 ```
 
 **Testing library from java code (dependencies defined in pom.xml, JUnit tests included in scr/test/java source folder)**
-Start SNMP daemon with protocol on osx:
+
+Prior to test library you have to start SNMP daemon with protocol on osx:
 https://github.com/tangrammer/ew_snmp/wiki/Enabling-snmp-protocols
 
+And then:...
 
 ```
 $ cd ew_snmp
