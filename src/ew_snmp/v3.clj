@@ -63,7 +63,8 @@
           )))))
 
 
-(getv3 ["tcp" "localhost" 261] "juanv3" "comomolalagramola" "comomolalagramola" ["1.3.6.1.2.1.1.6.0"])
+(comment "testing"
+         (getv3 ["tcp" "localhost" 261] "juanv3" "comomolalagramola" "comomolalagramola" ["1.3.6.1.2.1.1.6.0"]))
 
 
 (defn v3-json

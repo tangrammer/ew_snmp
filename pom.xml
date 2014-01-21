@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.enterpriseweb</groupId>
-  <artifactId>snmp-test</artifactId>
+  <artifactId>snmp</artifactId>
   <packaging>jar</packaging>
   <version>0.0.1</version>
   <name>snmp</name>
@@ -17,13 +17,13 @@
   <scm>
     <connection>scm:git:git://github.com/tangrammer/ew_snmp.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/tangrammer/ew_snmp.git</developerConnection>
-    <tag>468e2bc7a1000322880b7d32c99a2e55b2869e6f
+    <tag>6c21ea8b1d96de3ffa5378e24718fbf9f6556858
 </tag>
     <url>https://github.com/tangrammer/ew_snmp</url>
   </scm>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <testSourceDirectory>src/test/java</testSourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
     <resources>
       <resource>
         <directory>resources</directory>
@@ -39,9 +39,7 @@
     </testResources>
     <directory>target</directory>
     <outputDirectory>target/classes</outputDirectory>
-    <plugins>
-    
-  </plugins>
+    <plugins/>
   </build>
   <repositories>
     <repository>
@@ -120,17 +118,6 @@
       </exclusions>
       <scope>test</scope>
     </dependency>
-    <dependency>
-    	<groupId>com.enterpriseweb</groupId>
-    	<artifactId>snmp</artifactId>
-    	<version>0.0.1</version>
-    </dependency>
-    <dependency>
-  <groupId>junit</groupId>
-  <artifactId>junit</artifactId>
-  <version>4.11</version>
-  <scope>test</scope>
-</dependency> 
   </dependencies>
 </project>
 
