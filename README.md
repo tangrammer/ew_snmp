@@ -83,7 +83,3 @@ $ maven test
 
 # Resources and documentation used on development
 https://github.com/tangrammer/ew_snmp/wiki/Resources-used-on-prototype-development
-
-# clojure doc api
-`lein marg -f index.html`
-http://tangrammer.github.com/ew_snmp/
