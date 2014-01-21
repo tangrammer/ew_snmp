@@ -1,4 +1,4 @@
-(defproject ew_snmp "0.1.0"
+(defproject ew_snmp "0.1.1"
   :description "SNMP and SNMP from clojure"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -10,6 +10,6 @@
 
 ]
   :repositories {"snmp4j" "https://oosnmp.net/dist/release"}
-  :aot [ew_snmp.SNMPApi]
+  :aot [com.enterpriseweb.snmp.V2 com.enterpriseweb.snmp.V3]
   :plugins [[lein-marginalia "0.7.1"]]
 )

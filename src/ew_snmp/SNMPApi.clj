@@ -9,8 +9,6 @@
         [ew_snmp.v3 :only [ getv3]]
         )
   (:import [org.json JSONObject])
-
-
   (:gen-class :methods
               [#^{:static true} [v2 [String String String] String]
                #^{:static true} [v2Json [String String String] org.json.JSONObject]
