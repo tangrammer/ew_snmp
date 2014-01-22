@@ -17,7 +17,7 @@
   <scm>
     <connection>scm:git:git://github.com/tangrammer/ew_snmp.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/tangrammer/ew_snmp.git</developerConnection>
-    <tag>6c21ea8b1d96de3ffa5378e24718fbf9f6556858
+    <tag>76ec0d396a309c622626ccfeaba9b3229d73e510
 </tag>
     <url>https://github.com/tangrammer/ew_snmp</url>
   </scm>

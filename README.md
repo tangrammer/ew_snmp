@@ -78,8 +78,8 @@ And then:...
 
 ```
 $ cd ew_snmp
-$ maven clean
-$ maven test
+$ mvn clean
+$ mvn test
 
 ```
 
